@@ -13,7 +13,7 @@ export const defaultStyles = {
 
 export const sizeStyles = {
   m: {
-    icon: S.FONT_S,
+    icon: S.FONT_M,
     containers: {
       height: S.ROW,
       ...T.PADDING_L(S.GRID_BASELINE),
@@ -22,7 +22,7 @@ export const sizeStyles = {
     content: { fontSize: S.FONT_BASELINE },
   },
   l: {
-    icon: S.FONT_M,
+    icon: S.FONT_L,
     containers: {
       height: S.ROW + S.GUTTER,
       ...T.PADDING_L(S.GUTTER),
