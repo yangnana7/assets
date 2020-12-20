@@ -3,6 +3,7 @@ import Icon from "./Icon";
 import View from "../View/View";
 import _ from "lodash";
 import mapping from "./Icon.mapping";
+import Text from "../Text/Text";
 
 export default {
   title: "Components/Icon",
@@ -20,6 +21,7 @@ export const Basic = ({ size, color }) => (
     {_.map(icons, (i) => (
       <View style={{ marginRight: 16 }} key={i}>
         <Icon icon={i} size={size} color={color} />
+        <Text style={{ fontSize: 12 }}>{i}</Text>
       </View>
     ))}
   </View>

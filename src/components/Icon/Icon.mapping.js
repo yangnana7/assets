@@ -11,6 +11,6 @@ export default {
   jpy: I.BiYen,
   calendar: I.BiCalendarEvent,
   trade: I.BiPlayCircle,
-  settle: I.BiStopCircle,
-  money: I.BiMoney,
+  settle: I.BiExport,
+  money: I.BiImport,
 };
