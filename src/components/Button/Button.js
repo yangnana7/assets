@@ -20,8 +20,10 @@ export default ({ onPress, content, icon, backgroundColor, color, size }) => {
   return React.useMemo(
     () => (
       <View onPress={onPress} style={styles.containers}>
-        <Icon icon={icon} size={sizeStyles[size].icon} color={color} />
-        <Text style={styles.content}>{content}</Text>
+        {icon && (
+          <Icon icon={icon} size={sizeStyles[size].icon} color={color} />
+        )}
+        {content && <Text style={styles.content}>{content}</Text>}
       </View>
     ),
     [content, icon, backgroundColor, color, size]

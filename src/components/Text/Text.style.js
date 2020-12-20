@@ -4,6 +4,7 @@ export const defaultStyles = {
     display: "flex",
     ...T.FLEX_ROW,
     ...T.HIDDEN,
+    position: "relative",
   },
   span: {
     display: "-webkit-box",

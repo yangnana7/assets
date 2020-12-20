@@ -15,7 +15,6 @@ export const defaultStyles = {
   row: {
     ...T.PADDING_L(S.GUTTER),
     ...T.FLEX_ROW_CENTER,
-    ":hover": { backgroundColor: C.TRANSPARENT_BLACK_BRIGHT },
     borderBottom: `${S.BORDER_BASELINE}px ${C.TRANSPARENT_BLACK_LIGHT} solid`,
   },
   text: { fontSize: S.FONT_BASELINE },
@@ -23,4 +22,8 @@ export const defaultStyles = {
 
 export const borderStyles = {
   table: { border: `${S.BORDER_M}px ${C.BLACK} solid` },
+};
+
+export const hoverStyles = {
+  ":hover": { backgroundColor: C.TRANSPARENT_BLACK_BRIGHT },
 };
