@@ -1,11 +1,16 @@
-import * as I from "react-icons/im";
+import * as I from "react-icons/bi";
 
 export default {
-  plus: I.ImPlus,
-  minus: I.ImMinus,
-  ok: I.ImCheckmark,
-  delete: I.ImBin,
-  close: I.ImCross,
-  usd: I.ImCoinDollar,
-  jpy: I.ImCoinYen,
+  plus: I.BiPlus,
+  minus: I.BiMinus,
+  ok: I.BiCheck,
+  close: I.BiX,
+  delete: I.BiTrash,
+  save: I.BiSave,
+  usd: I.BiDollar,
+  jpy: I.BiYen,
+  calendar: I.BiCalendarEvent,
+  trade: I.BiPlayCircle,
+  settle: I.BiStopCircle,
+  money: I.BiMoney,
 };
