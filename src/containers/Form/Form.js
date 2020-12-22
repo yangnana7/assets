@@ -10,23 +10,27 @@ import Icon from "../../components/Icon/Icon";
 import Text from "../../components/Text/Text";
 
 export default () => {
+  const [localValue, onChange] = React.useState(undefined);
   const header = ["date", "trade", "price", "unit", "lot", "note", ""];
   const styles = combineStyles([defaultStyles]);
+
   const row = [
     <Text style={styles.dateColumn}>
       <Text style={styles.dateIcon}>
         <Icon icon="calendar" color="black" size={24} />
       </Text>
       <Text style={styles.date}>
-        <Input type="datetime-local" required />
+        <Input inputType="datetime-local" required />
       </Text>
     </Text>,
     "type",
-    <Input type="number" required />,
-    <Input type="number" required />,
-    <Input type="number" required />,
-    <Input type="string" />,
+    <Input inputType="number" required />,
+    <Input inputType="number" required />,
+    <Input inputType="number" required />,
+    <Input inputType="string" onChange={(v) => onChange(v)} />,
   ];
+
+  console.log(localValue);
   return React.useMemo(
     () => (
       <View>
@@ -34,24 +38,17 @@ export default () => {
           <TableRow values={row} hover={false} />
         </Table>
         <View style={styles.save}>
-          <Button
-            backgroundColor="gray"
-            size="l"
-            color={"white"}
-            icon="plus"
-            onPress={() => console.log("add row")}
-          />
+          <Button backgroundColor="gray" size="l" color={"white"} icon="plus" />
           <Button
             size="l"
             backgroundColor={"blue"}
             color={"white"}
             content="Save"
             icon="save"
-            onPress={() => console.log("value")}
           />
         </View>
       </View>
     ),
-    [row]
+    [row, localValue]
   );
 };
