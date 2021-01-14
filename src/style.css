@@ -1,0 +1,11 @@
+#timepicker-wrap[type="datetime-local"]:focus {
+  outline: none;
+}
+#timepicker-wrap[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+#timepicker-wrap[type="datetime-local"]::-webkit-calendar-picker-indicator:focus {
+  outline: none;
+}

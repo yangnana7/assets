@@ -1,5 +1,6 @@
 import React from "react";
 import Input from "./Input";
+import * as moment from "moment";
 
 export default {
   title: "Components/Input",
@@ -11,7 +12,7 @@ export default {
 
 export const String = Input.bind({});
 String.args = {
-  type: "string",
+  inputType: "string",
   defaultValue: "string value",
   placeholder: "entry something",
   required: false,
@@ -19,14 +20,12 @@ String.args = {
 
 export const Number = Input.bind({});
 Number.args = {
-  type: "number",
+  inputType: "number",
   defaultValue: "20",
   placeholder: "0",
 };
 
 export const Date = Input.bind({});
 Date.args = {
-  type: "datetime-local",
-  defaultValue: "20",
-  placeholder: "0",
+  inputType: "date",
 };

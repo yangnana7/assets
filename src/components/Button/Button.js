@@ -26,6 +26,6 @@ export default ({ onPress, content, icon, backgroundColor, color, size }) => {
         {content && <Text style={styles.content}>{content}</Text>}
       </View>
     ),
-    [content, icon, backgroundColor, color, size]
+    [content, icon, backgroundColor, color, size, onPress]
   );
 };

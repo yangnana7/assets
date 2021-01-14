@@ -3,6 +3,8 @@ import Icon from "../Icon/Icon";
 import { defaultStyles } from "./Input.style";
 import View from "../View/View";
 import { toClassName, combineStyles } from "../../styles/combine-styles";
+import * as moment from "moment";
+import Button from "../Button/Button";
 
 const formatValue = (value, type) => {
   let viewValue, modelValue;
@@ -43,6 +45,7 @@ export default ({
   required,
   onChange,
   defaultValue,
+  value,
 }) => {
   const inputRef = React.useRef();
   const [focus, setFocus] = React.useState(false);
@@ -59,8 +62,21 @@ export default ({
     setLocalValues(() => formatValue(defaultValue, inputType));
   }, [defaultValue]);
 
-  return React.useMemo(
-    () => (
+  return React.useMemo(() => {
+    if (inputType == "date") {
+      return (
+        <input
+          id="timepicker-wrap"
+          type="datetime-local"
+          value={localValues.viewValue || moment().format("YYYY-MM-DDThh:mm")}
+          onChange={(e) => _onChange(e.target.value)}
+          placeholder={placeholder}
+          style={styles.timepicker}
+          required
+        />
+      );
+    }
+    return (
       <View style={styles.container}>
         <input
           type={inputType}
@@ -68,9 +84,9 @@ export default ({
           placeholder={placeholder}
           required={required}
           value={localValues.viewValue}
+          defaultValue={defaultValue}
         />
       </View>
-    ),
-    []
-  );
+    );
+  }, [defaultValue, localValues, focus, inputType, required, value]);
 };
