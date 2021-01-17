@@ -1,9 +1,19 @@
+#timepicker-wrap[type="datetime-local"] {
+  opacity: 0;
+  position: absolute;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
 #timepicker-wrap[type="datetime-local"]:focus {
   outline: none;
 }
 #timepicker-wrap[type="datetime-local"]::-webkit-calendar-picker-indicator {
-  width: 30px;
-  height: 30px;
+  z-index: 10;
+  position: absolute;
+  left: -30px;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
 }
 #timepicker-wrap[type="datetime-local"]::-webkit-calendar-picker-indicator:focus {

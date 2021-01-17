@@ -62,21 +62,8 @@ export default ({
     setLocalValues(() => formatValue(defaultValue, inputType));
   }, [defaultValue]);
 
-  return React.useMemo(() => {
-    if (inputType == "date") {
-      return (
-        <input
-          id="timepicker-wrap"
-          type="datetime-local"
-          value={localValues.viewValue || moment().format("YYYY-MM-DDThh:mm")}
-          onChange={(e) => _onChange(e.target.value)}
-          placeholder={placeholder}
-          style={styles.timepicker}
-          required
-        />
-      );
-    }
-    return (
+  return React.useMemo(
+    () => (
       <View style={styles.container}>
         <input
           type={inputType}
@@ -87,6 +74,7 @@ export default ({
           defaultValue={defaultValue}
         />
       </View>
-    );
-  }, [defaultValue, localValues, focus, inputType, required, value]);
+    ),
+    [defaultValue, localValues, focus, inputType, required, value]
+  );
 };

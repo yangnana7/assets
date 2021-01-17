@@ -1,6 +1,5 @@
 import React from "react";
 import Input from "./Input";
-import * as moment from "moment";
 
 export default {
   title: "Components/Input",
@@ -23,9 +22,4 @@ Number.args = {
   inputType: "number",
   defaultValue: "20",
   placeholder: "0",
-};
-
-export const Date = Input.bind({});
-Date.args = {
-  inputType: "date",
 };

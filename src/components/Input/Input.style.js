@@ -9,14 +9,4 @@ export const defaultStyles = {
     fontSize: S.FONT_BASELINE,
     marginRight: S.GUTTER,
   },
-  timepicker: {
-    borderWidth: S.BORDER_BASELINE,
-    borderRadius: S.BORDER_RADIUS_BASELINE,
-    borderColor: C.TRANSPARENT_BLACK_LIGHT,
-    ":focus": {
-      borderWidth: S.BORDER_M,
-      borderRadius: S.BORDER_RADIUS_BASELINE,
-      borderColor: C.SECONDARY,
-    },
-  },
 };
