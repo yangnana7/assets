@@ -5,8 +5,14 @@ import * as C from "../../styles/colors";
 export const defaultStyles = {
   container: { ...T.FLEX_ROW },
   required: {
-    color: C.ERROR,
+    color: C.RED,
     fontSize: S.FONT_BASELINE,
     marginRight: S.GUTTER,
+  },
+  requiredInfo: {
+    color: C.RED,
+    fontSize: S.FONT_S,
+    ...T.BOLD,
+    marginLeft: "auto",
   },
 };

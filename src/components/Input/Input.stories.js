@@ -23,3 +23,10 @@ Number.args = {
   defaultValue: "20",
   placeholder: "0",
 };
+
+export const Float = Input.bind({});
+Float.args = {
+  inputType: "float",
+  defaultValue: "2.12",
+  placeholder: "0.000",
+};

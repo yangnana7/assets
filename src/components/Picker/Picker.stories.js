@@ -4,14 +4,18 @@ import { Picker } from "./index";
 export default {
   title: "Components/Picker",
   component: Picker,
-  argTypes: {
-    required: { control: "boolean" },
-  },
 };
 
 export const TimePicker = Picker.Date.bind({});
-TimePicker.args = {
-  inputType: "number",
-  defaultValue: "20",
-  placeholder: "0",
+TimePicker.args = {};
+
+export const SelectPicker = Picker.Select.bind({});
+SelectPicker.args = {
+  defaultValue: "buy",
+  name: "trade",
+  options: [
+    { key: "buy", label: "buy" },
+    { key: "sell", label: "sell" },
+  ],
+  required: false,
 };

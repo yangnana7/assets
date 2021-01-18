@@ -17,7 +17,6 @@ export default ({ onChange }) => {
   };
   const styles = combineStyles([defaultStyles]);
 
-  console.log(localValue);
   return React.useMemo(
     () => (
       <View style={styles.wrap}>
