@@ -29,7 +29,7 @@ const formatValue = (value, type) => {
   viewValue = isFalsy(modelValue) ? "" : _.toString(modelValue);
   modelValue = isFalsy(modelValue) ? undefined : modelValue;
 
-  if (type == "float" && value.substr(value.length - 1) == ".") {
+  if (type == "float" && _.toString(value).substr(value.length - 1) == ".") {
     viewValue = viewValue + ".";
   }
 
@@ -46,7 +46,7 @@ export default ({
   onChange,
   defaultValue = "",
   requiredInfo,
-  secureTextEntry,
+  secureTextEntry = false,
 }) => {
   const [localValues, setLocalValues] = React.useState([]);
 

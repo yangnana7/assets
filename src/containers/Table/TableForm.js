@@ -4,7 +4,7 @@ import Button from "../../components/Button/Button";
 import View from "../../components/View/View";
 import TableRow from "../../components/Table/TableRow";
 import Table from "../../components/Table/Table";
-import { defaultStyles } from "./Form.style";
+import { defaultStyles } from "./TableForm.style";
 import { combineStyles } from "../../styles/combine-styles";
 import Icon from "../../components/Icon/Icon";
 import Text from "../../components/Text/Text";
@@ -13,7 +13,13 @@ import SelectPicker from "../../components/Picker/SelectPicker";
 
 export default () => {
   const [localValue, onChange] = React.useState([]);
-  const [savedValue, saveItem] = React.useState([]);
+  const [tables, setTable] = React.useState([]);
+
+  const header = ["date", "trade", "price", "unit", "lot", "note", ""];
+  const options = [
+    { key: "buy", label: "buy" },
+    { key: "sell", label: "sell" },
+  ];
   const styles = combineStyles([defaultStyles]);
 
   const _onChange = (key, value) => {
@@ -24,15 +30,45 @@ export default () => {
     }));
   };
 
-  const setItems = (value) => {
-    saveItem({ key: value.key, value: value.value });
+  const row = [
+    <Text style={styles.dateColumn}>
+      <Text style={styles.date}>
+        <TimePicker onChange={(v) => _onChange("date", v)} />
+      </Text>
+    </Text>,
+    //<SelectPicker options={options} name="trade" />,
+    //<Input
+    //  inputType="float"
+    //  required
+    //  placeholder={0.01}
+    //  onChange={(v) => _onChange("lot", v)}
+    ///>,
+    //<Input
+    //  inputType="number"
+    //  required
+    //  placeholder={1}
+    //  onChange={(v) => _onChange("lot", v)}
+    ///>,
+    //<Input
+    //  inputType="string"
+    //  onChange={(v) => _onChange("info", v)}
+    //  placeholder="note"
+    ///>,
+  ];
+
+  const setTableItems = (value) => {
+    setTable(_.concat(tables, value));
+    console.log(tables);
   };
 
-  console.log(localValue);
+  const values = [localValue.value];
+
   return React.useMemo(
     () => (
       <View>
-        <Input onChange={(e) => _onChange("keyName", e)} />
+        <Table header={header} border>
+          <TableRow values={row} hover={false} />
+        </Table>
         <View style={styles.save}>
           <Button backgroundColor="gray" size="l" color={"white"} icon="plus" />
           <Button
@@ -41,7 +77,7 @@ export default () => {
             color={"white"}
             content="Save"
             icon="save"
-            onPress={() => setItems(localValue)}
+            onPress={() => setTableItems(localValue)}
           />
         </View>
         <View style={{ marginTop: 100 }}>
@@ -53,10 +89,11 @@ export default () => {
             onPress={() => localStorage.clear()}
           />
         </View>
-        <Text style={{ fontSize: 20 }}>{savedValue.key}</Text>
-        <Text style={{ fontSize: 20 }}>{savedValue.value}</Text>
+        <Table header={header} border>
+          <TableRow values={values} hover />
+        </Table>
       </View>
     ),
-    [localValue, savedValue]
+    [row, localValue, tables, values]
   );
 };

@@ -15,6 +15,7 @@ String.args = {
   defaultValue: "string value",
   placeholder: "entry something",
   required: false,
+  secureTextEntry: false,
 };
 
 export const Number = Input.bind({});
