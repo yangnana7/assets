@@ -5,7 +5,14 @@ import { defaultStyles, marginStyles, sizeStyles } from "./Button.style";
 import { combineStyles } from "../../styles/combine-styles";
 import Icon from "../Icon/Icon";
 
-export default ({ onPress, content, icon, backgroundColor, color, size }) => {
+export default ({
+  onPress,
+  content,
+  icon,
+  backgroundColor,
+  color,
+  size = "m",
+}) => {
   const dynamicStyle = {
     containers: { backgroundColor: backgroundColor },
     content: { color: color },

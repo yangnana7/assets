@@ -2,7 +2,7 @@ import React from "react";
 import TableForm from "./TableForm";
 
 export default {
-  title: "Components/TableForm",
+  title: "Containers/TableForm",
   component: TableForm,
 };
 

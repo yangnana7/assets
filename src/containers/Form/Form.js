@@ -2,39 +2,40 @@ import React from "react";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import View from "../../components/View/View";
-//import TableRow from "../../components/Table/TableRow";
-//import Table from "../../components/Table/Table";
 import { defaultStyles } from "./Form.style";
 import { combineStyles } from "../../styles/combine-styles";
-//import Icon from "../../components/Icon/Icon";
 import Text from "../../components/Text/Text";
-//import TimePicker from "../../components/Picker/TimePicker";
-//import SelectPicker from "../../components/Picker/SelectPicker";
 import _ from "lodash";
+import { v4 as uuid } from "uuid";
 
 export default () => {
+  const inputRef = React.useRef();
   const [localValue, onChange] = React.useState(undefined);
-  const [savedValue, saveItem] = React.useState([]);
+  const [values, setValues] = React.useState([]);
   const styles = combineStyles([defaultStyles]);
 
-  const setItems = (value) => {
-    saveItem((savedValue) => _.concat(savedValue, value));
-  };
-  const deleteItem = (v) => {
-    saveItem((savedValue) => _.pull(savedValue, v));
+  const addValue = (key, value) => {
+    setValues((values) => _.concat(values, [{ key: key, value: value }]));
   };
 
-  //onPress={() => localStorage.clear()}
+  const deleteValue = (key) => {
+    setValues((values) => _.filter(values, (value) => value.key !== key));
+  };
+
   return React.useMemo(
     () => (
       <React.Fragment>
-        <Input onChange={(e) => onChange(e)} inputType="string" />
+        <Input
+          onChange={(e) => onChange(e)}
+          inputType="string"
+          inputRef={inputRef}
+        />
         <View style={styles.save}>
           <Button
             size="l"
             backgroundColor={"gray"}
             icon="plus"
-            onPress={() => setItems(localValue)}
+            onPress={() => addValue(uuid(), localValue)}
           />
           <Button
             size="l"
@@ -42,24 +43,29 @@ export default () => {
             color={"white"}
             content="Save"
             icon="save"
-            onPress={() => localStorage.setItem("keyName", savedValue)}
+            onPress={() => localStorage.setItem("keyName", values)}
           />
         </View>
-        {_.map(savedValue, (v, index) => (
-          <View key={index}>
-            <Text>{v}</Text>
+        {_.map(values, (v) => (
+          <View key={v.key} style={styles.row}>
+            <Text>{v.value}</Text>
             <Button
               icon="delete"
               backgroundColor="red"
               size="l"
               color="white"
-              onPress={() => deleteItem(v)}
+              onPress={() => deleteValue(v.key)}
             />
           </View>
         ))}
-        <Text>key name</Text>
+        <Button
+          backgroundColor="red"
+          icon="close"
+          size="l"
+          onPress={() => localStorage.clear()}
+        />
       </React.Fragment>
     ),
-    [localValue, savedValue]
+    [localValue, values]
   );
 };

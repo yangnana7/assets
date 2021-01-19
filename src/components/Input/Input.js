@@ -47,6 +47,7 @@ export default ({
   defaultValue = "",
   requiredInfo,
   secureTextEntry = false,
+  inputRef,
 }) => {
   const [localValues, setLocalValues] = React.useState([]);
 
@@ -69,6 +70,7 @@ export default ({
         <View style={styles.container}>
           {required && <Text style={styles.required}>*</Text>}
           <input
+            ref={inputRef}
             type={type}
             onChange={(e) => _onChange(e.target.value)}
             placeholder={placeholder}
