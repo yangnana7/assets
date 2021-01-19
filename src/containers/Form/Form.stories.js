@@ -2,7 +2,7 @@ import React from "react";
 import Form from "./Form";
 
 export default {
-  title: "Components/Form",
+  title: "Containers/Form",
   component: Form,
 };
 

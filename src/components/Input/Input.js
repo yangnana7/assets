@@ -41,7 +41,7 @@ const formatValue = (value, type) => {
 
 export default ({
   inputType,
-  placeholder,
+  placeholder = "",
   required,
   onChange,
   defaultValue = "",
@@ -81,6 +81,6 @@ export default ({
         )}
       </React.Fragment>
     ),
-    [defaultValue, localValues, inputType, required, requiredInfo]
+    [defaultValue, localValues, inputType, required, requiredInfo, onChange]
   );
 };
