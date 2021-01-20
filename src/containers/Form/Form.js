@@ -23,6 +23,8 @@ export default () => {
     setValues((values) => _.filter(values, (value) => value.key !== key));
   };
 
+  const savedValue = localStorage.getItem("keyName");
+
   return React.useMemo(
     () => (
       <React.Fragment>
@@ -38,14 +40,6 @@ export default () => {
             icon="plus"
             onPress={() => addValue(uuid(), localValue)}
           />
-          <Button
-            size="l"
-            backgroundColor={"blue"}
-            color={"white"}
-            content="Save"
-            icon="save"
-            onPress={() => localStorage.setItem("keyName", values)}
-          />
         </View>
         {_.map(values, (v) => (
           <View key={v.key} style={styles.row}>
@@ -59,12 +53,28 @@ export default () => {
             />
           </View>
         ))}
-        <Button
-          backgroundColor="red"
-          icon="close"
-          size="l"
-          onPress={() => localStorage.clear()}
-        />
+        {_.size(savedValue) > 0 &&
+          _.map(JSON.parse(savedValue), (s) => (
+            <Text key={s.key}>{s.value}</Text>
+          ))}
+        <View style={styles.buttonGroup}>
+          <Button
+            size="l"
+            backgroundColor={"blue"}
+            color={"white"}
+            content="Save"
+            icon="save"
+            onPress={() =>
+              localStorage.setItem("keyName", JSON.stringify(values))
+            }
+          />
+          <Button
+            backgroundColor="red"
+            icon="close"
+            size="l"
+            onPress={() => localStorage.clear()}
+          />
+        </View>
       </React.Fragment>
     ),
     [localValue, values]
