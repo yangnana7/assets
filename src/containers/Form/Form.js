@@ -9,13 +9,14 @@ import _ from "lodash";
 import { v4 as uuid } from "uuid";
 
 export default () => {
-  const inputRef = React.useRef();
+  const inputRef = React.useRef(undefined);
   const [localValue, onChange] = React.useState(undefined);
   const [values, setValues] = React.useState([]);
   const styles = combineStyles([defaultStyles]);
 
   const addValue = (key, value) => {
     setValues((values) => _.concat(values, [{ key: key, value: value }]));
+    inputRef.current.clear();
   };
 
   const deleteValue = (key) => {
@@ -28,7 +29,7 @@ export default () => {
         <Input
           onChange={(e) => onChange(e)}
           inputType="string"
-          inputRef={inputRef}
+          onRef={(ref) => (inputRef.current = ref)}
         />
         <View style={styles.save}>
           <Button

@@ -5,6 +5,7 @@ import View from "../View/View";
 import Text from "../Text/Text";
 import { toClassName, combineStyles } from "../../styles/combine-styles";
 import _ from "lodash";
+import Button from "../Button/Button";
 
 const formatValue = (value, type) => {
   let viewValue, modelValue;
@@ -47,8 +48,9 @@ export default ({
   defaultValue = "",
   requiredInfo,
   secureTextEntry = false,
-  inputRef,
+  onRef,
 }) => {
+  const inputRef = React.useRef();
   const [localValues, setLocalValues] = React.useState([]);
 
   const _onChange = (value) => {
@@ -62,7 +64,18 @@ export default ({
     setLocalValues(() => formatValue(defaultValue, inputType));
   }, [defaultValue]);
 
+  React.useEffect(() => {
+    onRef && onRef({ clear });
+  }, []);
+
   const type = secureTextEntry ? "password" : inputType;
+
+  const clear = () => {
+    inputRef.current.focus();
+    const value = formatValue("", inputType);
+    setLocalValues(value);
+    onChange && onChange(value.modelValue);
+  };
 
   return React.useMemo(
     () => (
@@ -83,6 +96,14 @@ export default ({
         )}
       </React.Fragment>
     ),
-    [defaultValue, localValues, inputType, required, requiredInfo, onChange]
+    [
+      defaultValue,
+      localValues,
+      inputType,
+      required,
+      requiredInfo,
+      onChange,
+      onRef,
+    ]
   );
 };
