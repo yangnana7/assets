@@ -11,6 +11,10 @@ export default ({ onChange }) => {
   const Now = moment().format("YYYY-MM-DDThh:mm");
   const [localValue, setLocalValues] = React.useState(Now);
 
+  React.useEffect(() => {
+    onChange(Now);
+  }, []);
+
   const _onChange = (value) => {
     setLocalValues(value);
     onChange && onChange(value);

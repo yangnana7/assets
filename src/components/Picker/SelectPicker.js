@@ -15,9 +15,14 @@ export default ({
 }) => {
   const [localValue, setLocalValues] = React.useState(defaultValue);
 
+  React.useEffect(() => {
+    onChange(defaultValue);
+  }, []);
+
   const _onChange = (value) => {
     setLocalValues(value);
-    onChange && onChange(value);
+    const ef = document.getElementById("selectPicker").value;
+    onChange && onChange(ef);
   };
   const styles = combineStyles([defaultStyles]);
 
@@ -26,9 +31,11 @@ export default ({
       <View style={styles.wrap}>
         {required && <Text style={styles.required}>*</Text>}
         <select
+          id="selectPicker"
           onChange={(v) => _onChange(v)}
           style={styles.select}
           name={name}
+          defaultValue={defaultValue}
         >
           {_.map(options, (v) => (
             <option key={v.key} value={v.key} style={styles.option}>
@@ -38,6 +45,6 @@ export default ({
         </select>
       </View>
     ),
-    [options, name, required]
+    [options, name, required, defaultValue]
   );
 };

@@ -7,8 +7,17 @@ import { combineStyles } from "../../styles/combine-styles";
 import Text from "../../components/Text/Text";
 import _ from "lodash";
 import { v4 as uuid } from "uuid";
+import { Picker } from "../../components/Picker";
 
-export default () => {
+export default ({
+  keyName = "key",
+  type = "input",
+  inputType,
+  required,
+  options,
+  onAddRow,
+  defaultSelected,
+}) => {
   const inputRef = React.useRef(undefined);
   const [localValue, onChange] = React.useState(undefined);
   const [values, setValues] = React.useState([]);
@@ -16,31 +25,68 @@ export default () => {
 
   const addValue = (key, value) => {
     setValues((values) => _.concat(values, [{ key: key, value: value }]));
-    inputRef.current.clear();
+    type == "input" && inputRef.current.clear();
+    onAddRow && onAddRow(key, value);
   };
 
   const deleteValue = (key) => {
     setValues((values) => _.filter(values, (value) => value.key !== key));
   };
 
-  const savedValue = localStorage.getItem("keyName");
+  const savedValue = JSON.parse(localStorage.getItem(keyName));
 
   return React.useMemo(
     () => (
       <React.Fragment>
-        <Input
-          onChange={(e) => onChange(e)}
-          inputType="string"
-          onRef={(ref) => (inputRef.current = ref)}
-        />
-        <View style={styles.save}>
+        <View style={styles.container}>
+          {type == "input" && (
+            <Input
+              onChange={(e) => onChange(e)}
+              inputType={inputType}
+              onRef={(ref) => (inputRef.current = ref)}
+              required={required}
+            />
+          )}
+          {type == "timepicker" && (
+            <Picker.Date onChange={(e) => onChange(e)} />
+          )}
+          {type == "select" && (
+            <Picker.Select
+              onChange={(e) => onChange(e)}
+              defaultValue={defaultSelected}
+              options={options}
+              required={required}
+              name={keyName}
+              value={localValue}
+            />
+          )}
           <Button
-            size="l"
+            size="m"
             backgroundColor={"gray"}
+            color="white"
             icon="plus"
             onPress={() => addValue(uuid(), localValue)}
           />
         </View>
+        <View style={styles.buttonGroup}>
+          <Button
+            size="l"
+            backgroundColor={"blue"}
+            color={"white"}
+            content="Save"
+            icon="save"
+            onPress={() =>
+              localStorage.setItem(keyName, JSON.stringify(values))
+            }
+          />
+          <Button
+            backgroundColor="red"
+            icon="close"
+            size="l"
+            onPress={() => localStorage.clear()}
+          />
+        </View>
+        <Text>{keyName}</Text>
         {_.map(values, (v) => (
           <View key={v.key} style={styles.row}>
             <Text>{v.value}</Text>
@@ -54,29 +100,9 @@ export default () => {
           </View>
         ))}
         {_.size(savedValue) > 0 &&
-          _.map(JSON.parse(savedValue), (s) => (
-            <Text key={s.key}>{s.value}</Text>
-          ))}
-        <View style={styles.buttonGroup}>
-          <Button
-            size="l"
-            backgroundColor={"blue"}
-            color={"white"}
-            content="Save"
-            icon="save"
-            onPress={() =>
-              localStorage.setItem("keyName", JSON.stringify(values))
-            }
-          />
-          <Button
-            backgroundColor="red"
-            icon="close"
-            size="l"
-            onPress={() => localStorage.clear()}
-          />
-        </View>
+          _.map(savedValue, (s) => <Text key={s.key}>{s.value}</Text>)}
       </React.Fragment>
     ),
-    [localValue, values]
+    [localValue, values, keyName, inputType, type, required]
   );
 };

@@ -2,98 +2,121 @@ import React from "react";
 import Input from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
 import View from "../../components/View/View";
-import TableRow from "../../components/Table/TableRow";
-import Table from "../../components/Table/Table";
 import { defaultStyles } from "./TableForm.style";
 import { combineStyles } from "../../styles/combine-styles";
-import Icon from "../../components/Icon/Icon";
 import Text from "../../components/Text/Text";
-import TimePicker from "../../components/Picker/TimePicker";
-import SelectPicker from "../../components/Picker/SelectPicker";
+import _ from "lodash";
+import { v4 as uuid } from "uuid";
+import { Picker } from "../../components/Picker";
+import * as moment from "moment";
 
-export default () => {
-  const [localValue, onChange] = React.useState([]);
-  const [tables, setTable] = React.useState([]);
+const Now = moment().format("YYYY-MM-DDThh:mm");
+const defalutValue = [
+  {
+    key: uuid(),
+    payload: {
+      string: "no message",
+      date: Now,
+      trade: "buy",
+    },
+  },
+];
 
-  const header = ["date", "trade", "price", "unit", "lot", "note", ""];
-  const options = [
-    { key: "buy", label: "buy" },
-    { key: "sell", label: "sell" },
-  ];
+export default ({
+  keyName = "key",
+  type = "input",
+  inputType,
+  required,
+  options,
+  onAddRow,
+  defaultSelected,
+}) => {
+  const inputRef = React.useRef(undefined);
+  const [localValue, onChange] = React.useState(undefined);
+  const [values, setValues] = React.useState(defalutValue);
   const styles = combineStyles([defaultStyles]);
 
-  const _onChange = (key, value) => {
-    onChange((localValue) => ({
-      ...localValue,
-      key: key,
-      value: value,
-    }));
+  const _onChange = React.useCallback(
+    (attr, newValue) => {
+      onChange({ ...defalutValue.payload, [attr]: newValue });
+    },
+    [defalutValue, onChange]
+  );
+  const payload = {};
+  const addValue = React.useCallback(
+    (attr, newValue) => {
+      //if (_.isEmpty(payload.note)) {
+      //  setValues({ ...values.payload, note: "no message" });
+      //}
+      //if (_.isEmpty(payload.date)) {
+      //  setValues({ ...values.payload, date: Now });
+      //}
+      setValues({ ...values.payload, [attr]: newValue });
+    },
+    [payload, addValue]
+  );
+  console.log(values);
+  //setValues((values) =>
+  //  _.concat(values, [
+  //    { key: key, payload: { key: value.key, value: value.value } },
+  //  ])
+  //);
+  //  type == "input" && inputRef.current.clear();
+  //  onAddRow && onAddRow(key, value);
+  //};
+
+  const deleteValue = (key) => {
+    setValues((values) => _.filter(values, (value) => value.key !== key));
   };
 
-  const row = [
-    <Text style={styles.dateColumn}>
-      <Text style={styles.date}>
-        <TimePicker onChange={(v) => _onChange("date", v)} />
-      </Text>
-    </Text>,
-    //<SelectPicker options={options} name="trade" />,
-    //<Input
-    //  inputType="float"
-    //  required
-    //  placeholder={0.01}
-    //  onChange={(v) => _onChange("lot", v)}
-    ///>,
-    //<Input
-    //  inputType="number"
-    //  required
-    //  placeholder={1}
-    //  onChange={(v) => _onChange("lot", v)}
-    ///>,
-    //<Input
-    //  inputType="string"
-    //  onChange={(v) => _onChange("info", v)}
-    //  placeholder="note"
-    ///>,
-  ];
-
-  const setTableItems = (value) => {
-    setTable(_.concat(tables, value));
-    console.log(tables);
-  };
-
-  const values = [localValue.value];
+  const savedValue = JSON.parse(localStorage.getItem(keyName));
 
   return React.useMemo(
     () => (
-      <View>
-        <Table header={header} border>
-          <TableRow values={row} hover={false} />
-        </Table>
-        <View style={styles.save}>
-          <Button backgroundColor="gray" size="l" color={"white"} icon="plus" />
-          <Button
-            size="l"
-            backgroundColor={"blue"}
-            color={"white"}
-            content="Save"
-            icon="save"
-            onPress={() => setTableItems(localValue)}
+      <React.Fragment>
+        <View style={styles.container}>
+          <Picker.Date onChange={(e) => _onChange("date", e)} />
+          <Picker.Select
+            onChange={(e) => _onChange("trade", e)}
+            defaultValue={"buy"}
+            options={[
+              { key: "buy", label: "buy" },
+              { key: "sell", label: "sell" },
+            ]}
+            required={true}
+            name={keyName}
+            value={localValue}
           />
-        </View>
-        <View style={{ marginTop: 100 }}>
+          <Input
+            onChange={(e) => _onChange("note", e)}
+            inputType={inputType}
+            onRef={(ref) => (inputRef.current = ref)}
+            required={required}
+          />
           <Button
-            icon="delete"
-            backgroundColor="red"
-            size="l"
+            size="m"
+            backgroundColor={"gray"}
             color="white"
-            onPress={() => localStorage.clear()}
+            icon="plus"
+            onPress={() => addValue(uuid(), localValue)}
           />
         </View>
-        <Table header={header} border>
-          <TableRow values={values} hover />
-        </Table>
-      </View>
+        {_.map(values, (v) => (
+          <View key={v.key} style={styles.row}>
+            <Text>{v.payload.date}</Text>
+            <Text>{v.payload.trade}</Text>
+            <Text>{v.payload.string}</Text>
+            <Button
+              icon="delete"
+              backgroundColor="red"
+              size="l"
+              color="white"
+              onPress={() => deleteValue(v.key)}
+            />
+          </View>
+        ))}
+      </React.Fragment>
     ),
-    [row, localValue, tables, values]
+    [localValue, values, keyName, inputType, type, required]
   );
 };
