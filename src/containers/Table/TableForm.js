@@ -11,16 +11,6 @@ import { Picker } from "../../components/Picker";
 import * as moment from "moment";
 
 const Now = moment().format("YYYY-MM-DDThh:mm");
-const defalutValue = [
-  {
-    key: uuid(),
-    payload: {
-      string: "no message",
-      date: Now,
-      trade: "buy",
-    },
-  },
-];
 
 export default ({
   keyName = "key",
@@ -32,38 +22,23 @@ export default ({
   defaultSelected,
 }) => {
   const inputRef = React.useRef(undefined);
-  const [localValue, onChange] = React.useState(undefined);
-  const [values, setValues] = React.useState(defalutValue);
+  const [localValue, setLocalValue] = React.useState(undefined);
+  const [values, setValues] = React.useState([]);
   const styles = combineStyles([defaultStyles]);
 
-  const _onChange = React.useCallback(
-    (attr, newValue) => {
-      onChange({ ...defalutValue.payload, [attr]: newValue });
-    },
-    [defalutValue, onChange]
-  );
-  const payload = {};
-  const addValue = React.useCallback(
-    (attr, newValue) => {
-      //if (_.isEmpty(payload.note)) {
-      //  setValues({ ...values.payload, note: "no message" });
-      //}
-      //if (_.isEmpty(payload.date)) {
-      //  setValues({ ...values.payload, date: Now });
-      //}
-      setValues({ ...values.payload, [attr]: newValue });
-    },
-    [payload, addValue]
-  );
-  console.log(values);
-  //setValues((values) =>
-  //  _.concat(values, [
-  //    { key: key, payload: { key: value.key, value: value.value } },
-  //  ])
-  //);
-  //  type == "input" && inputRef.current.clear();
-  //  onAddRow && onAddRow(key, value);
-  //};
+  const _onChange = (key, value) => {
+    setLocalValue((localValue) => ({ ...localValue, [key]: value }));
+  };
+
+  React.useEffect(() => {
+    setLocalValue(() => ({ id: uuid() }));
+  }, []);
+
+  const addValue = (value) => {
+    setLocalValue((localValue) => ({ id: uuid() }));
+    setValues((values) => _.concat(values, value));
+    console.log(values);
+  };
 
   const deleteValue = (key) => {
     setValues((values) => _.filter(values, (value) => value.key !== key));
@@ -78,10 +53,10 @@ export default ({
           <Picker.Date onChange={(e) => _onChange("date", e)} />
           <Picker.Select
             onChange={(e) => _onChange("trade", e)}
-            defaultValue={"buy"}
+            defaultValue={"open"}
             options={[
-              { key: "buy", label: "buy" },
-              { key: "sell", label: "sell" },
+              { key: "open", label: "buy" },
+              { key: "close", label: "sell" },
             ]}
             required={true}
             name={keyName}
@@ -98,23 +73,13 @@ export default ({
             backgroundColor={"gray"}
             color="white"
             icon="plus"
-            onPress={() => addValue(uuid(), localValue)}
+            onPress={() => addValue(localValue)}
           />
         </View>
-        {_.map(values, (v) => (
-          <View key={v.key} style={styles.row}>
-            <Text>{v.payload.date}</Text>
-            <Text>{v.payload.trade}</Text>
-            <Text>{v.payload.string}</Text>
-            <Button
-              icon="delete"
-              backgroundColor="red"
-              size="l"
-              color="white"
-              onPress={() => deleteValue(v.key)}
-            />
-          </View>
-        ))}
+        <View style={styles.row}>
+          <Text>newValue</Text>
+          <Button icon="delete" backgroundColor="red" size="l" color="white" />
+        </View>
       </React.Fragment>
     ),
     [localValue, values, keyName, inputType, type, required]
