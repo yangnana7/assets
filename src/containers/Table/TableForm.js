@@ -12,15 +12,7 @@ import * as moment from "moment";
 
 const Now = moment().format("YYYY-MM-DDThh:mm");
 
-export default ({
-  keyName = "key",
-  type = "input",
-  inputType,
-  required,
-  options,
-  onAddRow,
-  defaultSelected,
-}) => {
+export default ({ keyName = "key", onAddRow, defaultSelected, inputs }) => {
   const inputRef = React.useRef(undefined);
   const [localValue, setLocalValue] = React.useState(undefined);
   const [values, setValues] = React.useState([]);
@@ -31,13 +23,12 @@ export default ({
   };
 
   React.useEffect(() => {
-    setLocalValue(() => ({ id: uuid() }));
+    setLocalValue(() => ({ _id: uuid() }));
   }, []);
 
   const addValue = (value) => {
-    setLocalValue((localValue) => ({ id: uuid() }));
+    setLocalValue((localValue) => ({ _id: uuid() }));
     setValues((values) => _.concat(values, value));
-    console.log(values);
   };
 
   const deleteValue = (key) => {
@@ -50,24 +41,31 @@ export default ({
     () => (
       <React.Fragment>
         <View style={styles.container}>
-          <Picker.Date onChange={(e) => _onChange("date", e)} />
-          <Picker.Select
-            onChange={(e) => _onChange("trade", e)}
-            defaultValue={"open"}
-            options={[
-              { key: "open", label: "buy" },
-              { key: "close", label: "sell" },
-            ]}
-            required={true}
-            name={keyName}
-            value={localValue}
-          />
-          <Input
-            onChange={(e) => _onChange("note", e)}
-            inputType={inputType}
-            onRef={(ref) => (inputRef.current = ref)}
-            required={required}
-          />
+          {_.map(inputs, (i) => (
+            <React.Fragment key={i.key}>
+              {i.type == "timePicker" && (
+                <Picker.Date onChange={(e) => _onChange(i.key, e)} />
+              )}
+              {i.type == "select" && (
+                <Picker.Select
+                  onChange={(e) => _onChange(i.key, e)}
+                  defaultValue={i.defaultValue}
+                  options={i.options}
+                  required={i.required}
+                  name={keyName}
+                />
+              )}
+              {i.type == "input" && (
+                <Input
+                  placeholder={i.placeholder}
+                  onChange={(e) => _onChange(i.key, e)}
+                  inputType={i.inputType}
+                  onRef={(ref) => (inputRef.current = ref)}
+                  required={i.required}
+                />
+              )}
+            </React.Fragment>
+          ))}
           <Button
             size="m"
             backgroundColor={"gray"}
@@ -76,12 +74,19 @@ export default ({
             onPress={() => addValue(localValue)}
           />
         </View>
-        <View style={styles.row}>
-          <Text>newValue</Text>
-          <Button icon="delete" backgroundColor="red" size="l" color="white" />
-        </View>
+        {_.map(values, (v) => (
+          <View style={styles.row} key={v._id}>
+            <Text>{v._id}</Text>
+            <Button
+              icon="delete"
+              backgroundColor="red"
+              size="l"
+              color="white"
+            />
+          </View>
+        ))}
       </React.Fragment>
     ),
-    [localValue, values, keyName, inputType, type, required]
+    [localValue, values, keyName, inputs]
   );
 };

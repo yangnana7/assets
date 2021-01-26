@@ -12,7 +12,7 @@ const names = [
 ];
 
 const defaultValue = {
-  id: uuid(),
+  _id: uuid(),
   date: Now,
   type: _.sample(types),
   name: _.sample(names._id),
